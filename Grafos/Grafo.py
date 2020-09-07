@@ -3,23 +3,57 @@ from Arista import Arista
 import json
 
 class Grafo:
+    ''' Clase grafo que representa el tipo de dato abstracto el cual es
+        una coleccion de vertices y aristas que se conectan entre si 
+        para formar un grafo.
+        Args:
+            Vertices(lista): Lista de referencias que almacena todos
+                             los vertices que formaran un nodo.
+            Aristas(lista): Lista de referencias que almacena todas las
+                            aristas que formaran un nodo.                             
+    '''
     def __init__(self):
+        ''' Inicializa una instancia de un grafo '''
         self.__Vertices = []
         self.__Aristas = []
         #self.__cantidadV = 0
         #self.__cantidadA = 0
     
     def insertarV(self, valor):
+        ''' Metodo para insertar un vertice dentro de la lista de
+            Vertices
+            Args:
+                valor(objeto): el valor(informacion) contendra el vertice
+        '''
         self.__Vertices.append( Vertice(valor) )
         #self.__cantidadV += 1
 
     def buscarV(self, valor):
+        ''' Metodo para buscar el valor de un vertice especifico dentro
+            de la lista de Vertices
+            Args:
+                valor(objeto): El valor del vertice que sera buscado.
+            Return:
+                return: referencia del vertice que esta siendo buscado
+                None: el vertice buscado no existe. 
+        '''
         for i in range(0, (len(self.__Vertices))):
             if valor == self.__Vertices[i].getValor():
                 return self.__Vertices[i]
         return None
     
     def buscarA(self, origen, destino):
+        ''' Metodo para buscar una arista especifica dentro de la lista
+            de los Aristas
+            Args:
+                origen(objeto): El valor del vertice de origen que sera
+                                buscado dentro de la lista de Aristas.
+                destino(objeto): El valor del vertice de llegada que sera
+                                 buscado dentro de la lista de Aristas.
+            Return:
+                i: referencia de la arista que esta siendo buscada
+                None: la arista buscada no existe.
+        '''
         for i in range(0, len(self.__Aristas)):
             raiz = i.getOrigen()
             fin = i.getDestino()
@@ -29,17 +63,29 @@ class Grafo:
                 return None
 
     def insertarA(self, origen, destino):
+        ''' Metodo para insertar una arista dentro de la lista de
+            Aristas
+            Args:
+                origen(objeto): el valor del vertice de origen. 
+                destino(objeto): el valor del vertice de destino. 
+        '''
         origen_aux = self.buscarV(origen)
         destino_aux = self.buscarV(destino)
         if( (origen_aux != None) and (destino_aux != None) ):
             self.__Aristas.append(Arista(origen_aux, destino_aux))
-        #self.__cantidadA += 1
 
     def ContarParticipaciones(self):
+        ''' Metodo que establece las participaciones de cada uno de los
+            vertices
+        '''
         self.ContarPartidas()
         self.ContarLlegadas()
 
     def ContarPartidas(self):
+        ''' Metodo que cuenta y almacena las referencias de los
+            vertices, a los cuales un vertice en especifico esta
+            dirigido, dentro de la lista Arista_parte
+        '''
         for i in range(0, len(self.__Vertices)):
             vertice_aux = self.__Vertices[i].getValor()
             for j in range(0, len(self.__Aristas)):
@@ -49,6 +95,10 @@ class Grafo:
                     self.__Vertices[i].setPartida(destino_aux)
 
     def ContarLlegadas(self):
+        ''' Metodo que cuenta y almacena las referencias de los
+            vertices, a los cuales un vertice en especifico se dirige,
+            dentro de la lista Arista_llega
+        '''
         for i in range(0, len(self.__Vertices)):
             vertice_aux = self.__Vertices[i].getValor()
             for j in range(0, len(self.__Aristas)):
@@ -59,6 +109,11 @@ class Grafo:
 
 
     def grafoVacio(self):
+        ''' Metodo que define si el grafo esta vacio o no.
+            Return:
+                True: El grafo esta vacio
+                False: El grafo contiene al menos un vertice.
+        '''
         if ( len(self.__Vertices) == 0):
             return True
         else:
